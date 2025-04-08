@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bài tập điền từ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .question {
+      margin-bottom: 25px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    input[type="text"] {
+      padding: 5px;
+      width: 220px;
+    }
+    .correct {
+      color: green;
+    }
+    .wrong {
+      color: red;
+    }
+    .answer {
+      display: none;
+      margin-top: 5px;
+      color: blue;
+    }
+    button {
+      margin-right: 10px;
+      margin-top: 5px;
+    }
+    #reset-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Bài tập: Điền từ vào chỗ trống</h2>
+  <button id="reset-btn" onclick="resetExercise()">🔁 Làm lại</button>
+
+  <div id="exercise-container"></div>
+
+  <script>
+    const questions = [
+      { text: "My sister and I don’t mind ___ food and drinks for the party tomorrow. (prepare)", answer: "preparing" },
+      { text: "When we arrived, Mary ___ a film on TV in the living room. (watch)", answer: "was watching" },
+      { text: "Suzanna ___ a uniform at work when she was an officer in TTC group. (have to/wear)", answer: "had to wear" },
+      { text: "The Picasso exhibition ___ in our country twice a year. (open)", answer: "is opened" },
+      { text: "Some movie stars ___ in the chat show on BBC last night. (interview)", answer: "were interviewed" },
+      { text: "The software for this game ___ a team of developers in Japan last month. (make)", answer: "was made by" },
+      { text: "The first computer game ___ Steve Russell. (invent)", answer: "was invented by" },
+      { text: "The 2010 Texting World Cup ___ by Korea. (win)", answer: "was won" },
+      { text: "These old cars ___ a German company in the 1970s. (produce)", answer: "were produced by" },
+      { text: "The first television set ___ in the 1920s. (build)", answer: "was built" },
+      { text: "New apps ___ on smartphones every day. (download)", answer: "are downloaded" },
+  { text: "Jackson Bell's magazine ___ teenagers from many different countries. (read)", answer: "is read by" },
+  { text: "Computers ___ schools and workplaces to complete tasks quickly. (use)", answer: "are used in" },
+  { text: "Digital files ___ on cloud servers for easy access. (save)", answer: "are saved" },
+  { text: "Alerts ___ to users when something goes wrong. (give)", answer: "are given" },
+  { text: "It ___ possible for people to live under the sea in the future. (WOULD)", answer: "would be" },
+  { text: "She ___ around the world on a luxury cruise if she didn't win the lottery. (TRAVEL)", answer: "would not travel" },
+  { text: "When we were kids, we ___ hours playing board games on rainy afternoons. (WOULD)", answer: "would spend" },
+  { text: "When I was a child, my grandparents ___ us to the beach for a holiday every summer. (WOULD/TAKE)", answer: "would take" },
+  { text: "If I had more free time, I ___ to a classical concert this weekend. (GO)", answer: "would go" },
+  { text: "Richard ___ to wear a suit to work, but he usually does. (HAVE)", answer: "does not have" },
+  { text: "People ___ on the grass or else they will be punished. (MUST/ WALK)", answer: "must not walk" },
+  { text: "My close friend, Anna, ___ part in the school's sports competition last year because her broken leg. (CAN/ TAKE)", answer: "could not take" },
+  { text: "Students ___ their tennis balls because there are school’s balls available for them. (NEED/ BRING)", answer: "do not need" },
+  { text: "Gary has travelled a lot and he ___ five languages. (CAN/ SPEAK)", answer: "can speak" },
+  { text: "___ were tired, the children continued playing in the park. (Although)", answer: "Although they" },
+  { text: "My brother worked hard, ___ won the championship last year. (so)", answer: "so he" },
+  { text: "We decided to stay home ___ too cold to go out. (because)", answer: "because it was" },
+  { text: "She wanted to buy the dress, ___ too expensive for her budget. (but)", answer: "but it was" },
+  { text: "They went inside ___ it started to rain. (soon)", answer: "soon after" },
+  { text: "I ___ any souvenirs when I was on holiday because I didn't have enough money. (buy)", answer: "did not buy" },
+  { text: "___ any photos when we visited the museum yesterday? (you/take)", answer: "Did you take" },
+  { text: "They ___ to visit the museum yesterday, but they decided to go shopping instead. (plan)", answer: "planned" },
+  { text: "___ at a map when I saw you yesterday? (you/look)", answer: "Were you looking" },
+  { text: "When we ___ home, I realized I didn't have my passport. (drive)", answer: "were driving" },
+  { text: "She ___ yoga every Sunday with her friends. (enjoy/do)", answer: "enjoys doing" },
+  { text: "My sister decided ___ some novels in her free time. (read)", answer: "to read" },
+  { text: "The students are ___ to music during the break. (interested/listen)", answer: "interested in listening" },
+  { text: "I'm not very ___ sports, so I would like to practice it. (good/ play)", answer: "good at playing" },
+  { text: "She often studies hard ___ good marks. (get)", answer: "to get" },
+  { text: "It ___ for her to catch the train yesterday. (too/late)", answer: "was too late" },
+  { text: "The backpack is ___ me to carry for long. (too/heavy)", answer: "too heavy for" },
+  { text: "They have ___ buy this car. (enough/money)", answer: "enough money to" },
+  { text: "Today, the music ___ for me to dance. (exciting/enough)", answer: "is exciting enough" },
+  { text: "The coffee is ___ enough for me to drink. (not hot/enough)", answer: "not hot enough" }
+    ];
+
+    function renderQuestions(shuffle = false) {
+      const container = document.getElementById("exercise-container");
+      container.innerHTML = "";
+
+      const indices = [...Array(questions.length).keys()];
+      if (shuffle) indices.sort(() => Math.random() - 0.5);
+
+      indices.forEach(i => {
+        const q = questions[i];
+        const inputId = `input${i}`;
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+          ${q.text.replace("___", `<input type="text" id="${inputId}" placeholder="Điền từ...">`)}
+          <div id="feedback${i}"></div>
+          <div id="answer${i}" class="answer">Đáp án đúng: <strong>${q.answer}</strong></div>
+          <button onclick="checkAnswer(${i}, '${q.answer.toLowerCase()}')">Kiểm tra</button>
+          <button onclick="toggleAnswer(${i})">Hiện đáp án đúng</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function checkAnswer(i, correctAnswer) {
+      const input = document.getElementById(`input${i}`).value.trim().toLowerCase();
+      const feedback = document.getElementById(`feedback${i}`);
+      if (input === correctAnswer) {
+        feedback.textContent = "✔️ Chính xác!";
+        feedback.className = "correct";
+      } else {
+        feedback.textContent = "❌ Sai rồi. Thử lại nhé!";
+        feedback.className = "wrong";
+      }
+    }
+
+    function toggleAnswer(i) {
+      const answerDiv = document.getElementById(`answer${i}`);
+      answerDiv.style.display = answerDiv.style.display === "block" ? "none" : "block";
+    }
+
+    function resetExercise() {
+      renderQuestions(true); // Xáo trộn và render lại
+    }
+
+    // Khởi tạo lần đầu
+    renderQuestions();
+  </script>
+
+</body>
+</html>
